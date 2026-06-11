@@ -6,3 +6,4 @@ vite.config.js
 vite.config.d.ts
 *.pdf
 syook-prototype-build-prompt.md
+.vercel
