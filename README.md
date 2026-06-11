@@ -4,6 +4,8 @@ Mobile-first Vite + React + TypeScript prototype for Syook's internal sales CRM 
 
 Live app: https://syookassignment.vercel.app
 
+AI transcript: https://github.com/bhardwajaakriti/syook/blob/main/AI_TRANSCRIPT.md
+
 ## Feature
 
 The 30-second deal update: a field sales associate can open a deal, update stage, put it on hold, attach a document, or add a note from a phone-sized deal ticket. Data is seeded locally and persists in `localStorage`.
