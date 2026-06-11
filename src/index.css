@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color: #111827;
+  background: #f5f6f8;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #f5f6f8;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.phone-page {
+  min-height: 100vh;
+  background: #f5f6f8;
+}
+
+.phone-frame {
+  width: 100%;
+  max-width: 420px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background: #f5f6f8;
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@media (min-width: 500px) {
+  .phone-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 24px;
+    background: #e5e7eb;
+  }
+
+  .phone-frame {
+    min-height: min(860px, calc(100vh - 48px));
+    max-height: min(860px, calc(100vh - 48px));
+    overflow: hidden;
+    border: 14px solid #111827;
+    border-radius: 2.5rem;
+    box-shadow: 0 24px 80px rgb(17 24 39 / 0.22);
+  }
+
+  .phone-scroll {
+    min-height: calc(min(860px, calc(100vh - 48px)) - 28px);
+    max-height: calc(min(860px, calc(100vh - 48px)) - 28px);
+    overflow-y: auto;
+  }
+}
