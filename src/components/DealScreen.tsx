@@ -9,6 +9,7 @@ import {
   stalenessLabel,
   wholeDaysSince,
 } from "../lib/format";
+import { getSuggestedAction } from "../lib/insights";
 
 type Sheet = "stage" | "hold" | "doc" | "note";
 type Tab = "Activity" | "Documents";
@@ -41,6 +42,7 @@ export function DealScreen({
   onSetTab,
 }: DealScreenProps) {
   const staleDays = wholeDaysSince(deal.lastActivityAt);
+  const suggestedAction = getSuggestedAction(deal, docs);
 
   return (
     <main className="safe-bottom flex flex-1 flex-col">
@@ -88,6 +90,19 @@ export function DealScreen({
               </span>
             )}
           </div>
+        </div>
+
+        <div className="grid grid-cols-3 gap-2">
+          <HealthTile label="Docs" value={String(docs.length)} />
+          <HealthTile label="Activity" value={String(activities.length)} />
+          <button
+            type="button"
+            onClick={() => onOpenSheet(suggestedAction.sheet)}
+            className={`min-h-16 rounded-lg border p-3 text-left ${suggestedToneClass(suggestedAction.tone)}`}
+          >
+            <span className="block text-xs font-bold text-slate-600">Next</span>
+            <span className="mt-1 block text-sm font-bold leading-4 text-slate-950">{suggestedAction.label}</span>
+          </button>
         </div>
 
         <div className="grid grid-cols-2 gap-2">
@@ -148,6 +163,21 @@ export function DealScreen({
       </section>
     </main>
   );
+}
+
+function HealthTile({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="min-h-16 rounded-lg border border-slate-200 bg-white p-3">
+      <span className="block text-xs font-bold text-slate-500">{label}</span>
+      <span className="mt-1 block text-xl font-bold text-slate-950">{value}</span>
+    </div>
+  );
+}
+
+function suggestedToneClass(tone: "red" | "amber" | "blue") {
+  if (tone === "red") return "border-red-200 bg-red-50";
+  if (tone === "amber") return "border-amber-200 bg-amber-50";
+  return "border-blue-200 bg-blue-50";
 }
 
 function ActionButton({ label, icon, onClick }: { label: string; icon: string; onClick: () => void }) {

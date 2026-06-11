@@ -10,6 +10,7 @@ import {
   stalenessLabel,
   wholeDaysSince,
 } from "../lib/format";
+import { buildFocusQueue, docsForDeal } from "../lib/insights";
 
 type StageFilter = "All" | Exclude<Stage, "Won" | "Lost">;
 type SummaryFilter = "open" | "hold" | "stale";
@@ -44,6 +45,7 @@ export function PipelineScreen({
     () => state.deals.filter((deal) => deal.stage === "Won" || deal.stage === "Lost"),
     [state.deals],
   );
+  const focusQueue = useMemo(() => buildFocusQueue(state.deals, state.docs), [state.deals, state.docs]);
 
   const counts = {
     open: openDeals.length,
@@ -174,6 +176,35 @@ export function PipelineScreen({
       </section>
 
       <section className="flex-1 space-y-3 px-4 py-4">
+        {focusQueue.length > 0 && (
+          <section className="rounded-lg border border-slate-200 bg-white p-3">
+            <div className="mb-2 flex items-center justify-between">
+              <h2 className="text-sm font-bold text-slate-950">Today Focus</h2>
+              <span className="text-xs font-semibold text-slate-500">{focusQueue.length} deals</span>
+            </div>
+            <div className="space-y-2">
+              {focusQueue.map((item) => (
+                <button
+                  key={item.deal.id}
+                  type="button"
+                  onClick={() => onOpenDeal(item.deal.id)}
+                  className="flex min-h-12 w-full items-center justify-between gap-3 rounded-md border border-slate-200 px-3 text-left"
+                >
+                  <span className="min-w-0">
+                    <span className="block truncate text-sm font-bold text-slate-950">{item.deal.clientName}</span>
+                    <span className="mt-0.5 block text-xs font-semibold text-slate-500">
+                      {item.deal.stage} · {docsForDeal(state.docs, item.deal.id).length} docs
+                    </span>
+                  </span>
+                  <span className={`shrink-0 rounded-full px-2 py-1 text-[11px] font-bold ring-1 ${focusToneClass(item.tone)}`}>
+                    {item.label}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </section>
+        )}
+
         {filteredDeals.map((deal) => (
           <DealCard key={deal.id} deal={deal} onOpen={() => onOpenDeal(deal.id)} />
         ))}
@@ -204,6 +235,12 @@ export function PipelineScreen({
       </section>
     </main>
   );
+}
+
+function focusToneClass(tone: "red" | "amber" | "blue") {
+  if (tone === "red") return "bg-red-50 text-red-700 ring-red-200";
+  if (tone === "amber") return "bg-amber-50 text-amber-700 ring-amber-200";
+  return "bg-blue-50 text-blue-700 ring-blue-200";
 }
 
 function SummaryButton({

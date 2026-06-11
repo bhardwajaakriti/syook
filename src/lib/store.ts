@@ -1,7 +1,7 @@
 import { createSeedState, type CRMState } from "../data/seed";
 
-const STORAGE_KEY = "syook-crm-v1";
-const VERSION = 1;
+const STORAGE_KEY = "syook-crm-v3";
+const VERSION = 2;
 
 type StoredState = CRMState & { version: number };
 
@@ -48,9 +48,7 @@ export function resetState() {
 }
 
 export function queuedCount(state: CRMState) {
-  const queuedActivities = state.activities.filter((activity) => activity.pendingSync).length;
-  const queuedDocs = state.docs.filter((doc) => doc.pendingSync).length;
-  return Math.max(queuedActivities, queuedDocs, queuedActivities);
+  return state.activities.filter((activity) => activity.pendingSync).length;
 }
 
 export function clearPendingSync(state: CRMState): CRMState {
